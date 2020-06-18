@@ -72,7 +72,9 @@ extension QuerySnapshot {
                 if let error = error {
                     subscriber.receive(completion: .failure(error))
                 } else if let querySnapshot = querySnapshot {
-                    _ = subscriber.receive(querySnapshot)
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        _ = subscriber.receive(querySnapshot)
+                    }
                 } else {
                     subscriber.receive(completion: .failure(FirestoreError.nilResultError))
                 }
